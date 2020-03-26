@@ -17,8 +17,8 @@ export default ()=>{
 
     return(
         <>
-        <input onChange={(e)=>{setInput(e.target.value)}}/>
-        <table className="table">
+        <input placeholder="Type to search" className="text-center" onChange={(e)=>{setInput(e.target.value)}}/>
+        <table className="table table-striped">
             <thead>
                 <tr>
                 <th scope="col">Image</th>
@@ -26,6 +26,7 @@ export default ()=>{
                 <th scope="col">Last</th>
                 <th scope="col">Email</th>
                 <th scope="col">Phone</th>
+                <th scope="col">Birthday</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +37,7 @@ export default ()=>{
                     <td>{user.name.last}</td>
                     <td>{user.email}</td>
                     <td>{user.phone}</td>
+                    <td>{user.dob.date}</td>
                 </tr>
                     )}
             </tbody>
