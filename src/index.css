@@ -1,8 +1,8 @@
 .jumbotron {
     background: rgb(255,255,255);
     background: linear-gradient(0deg, rgba(255,255,255,0) 0%, rgba(113,43,226,0.5230352303523036) 60%, rgba(82,43,226,0.991869918699187) 99%);
-    color: rgb(0, 132, 255);
-    text-shadow: cyan 0.5px 0.5px;
+    color: rgb(0, 86, 167);
+    text-shadow: rgba(0, 255, 255, 0.411) 0.5px 0.5px;
     padding-left: 25%;
     padding-bottom: 20px;
 }
@@ -15,9 +15,9 @@ input {
     margin-bottom: 20px;
 }
 thead {
-    background: rgba(73, 15, 128, 0.589);
+    background: rgba(73, 15, 128, 0.466);
     color: white;
 }
 .table-striped > tbody > tr:nth-child(2n+1) > td, .table-striped > tbody > tr:nth-child(2n+1) > th {
-    background-color: rgba(0, 183, 255, 0.301);
+    background-color: rgba(0, 183, 255, 0.055);
  }
