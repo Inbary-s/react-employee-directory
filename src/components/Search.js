@@ -2,42 +2,60 @@ import React, {useState, useEffect} from "react";
 import API from "../utils/API";
 
 export default ()=>{
-    const [input, setInput] = useState('');
-    const [data, setData] = useState([]);
-    const [filtered, setFiltered] = useState([]);
+    const [data, setData] = useState({users:[]});
+    const [filtered, setFiltered] = useState({users:[]});
+    const [ascend, setAscend] = useState(true);
 
     useEffect(()=>{
-        API().then(data=>{setFiltered(data.data.results);setData(data.data.results)})
+        API().then(data=>{
+            const modData = data.data.results.map(user=>{
+                const date = user.dob.date.split('-')
+                return ({
+                    name: `${user.name.first} ${user.name.last}`,
+                    email: user.email,
+                    phone: user.phone,
+                    dob: `${date[1]}/${date[2].split('T')[0]}/${date[0]}`,
+                    image: user.picture.thumbnail
+                })
+            })
+            setFiltered({users:modData});setData({users:modData})})
     },[])
 
-    useEffect(() => {
-        const filter = data.filter(user=>user.name.first.toLowerCase().includes(input) || user.name.last.toLowerCase().includes(input));
-        setFiltered(filter);
-    }, [input])
+    const handleSearch = (val)=>{
+        setFiltered({users:data.users.filter(user=> user.name.toLowerCase().includes(val)||user.email.includes(val)||user.phone.includes(val))})
+    }
+    
+    const handleSort = (type) => {
+        const sorted = ascend ? filtered.users.sort((a,b)=>
+            a[type] > b[type] ? 1 : a[type] < b[type] ? -1 : 0      
+        ) : filtered.users.sort((a,b)=>
+        a[type] < b[type] ? 1 : a[type] > b[type] ? -1 : 0      
+    )
+        setAscend(!ascend)
+        setFiltered({users:sorted})
+    }
 
     return(
         <>
-        <input placeholder="Type to search" className="text-center" onChange={(e)=>{setInput(e.target.value)}}/>
+        <input placeholder="Type to search" className="text-center" onChange={(e)=>{handleSearch(e.target.value.toLowerCase())}}/>
         <table className="table table-striped">
             <thead>
                 <tr>
-                <th scope="col">Image</th>
-                <th scope="col">First</th>
-                <th scope="col">Last</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
-                <th scope="col">Birthday</th>
+                <th scope="col" className="img"></th>
+                <th onClick={()=> handleSort('name')}scope="col"><i class="fas fa-arrows-alt-v"></i>Name</th>
+                <th onClick={()=> handleSort('email')}scope="col"><i class="fas fa-arrows-alt-v"></i>Email</th>
+                <th onClick={()=> handleSort('phone')}scope="col"><i class="fas fa-arrows-alt-v"></i>Phone</th>
+                <th onClick={()=> handleSort('dob')}scope="col"><i class="fas fa-arrows-alt-v"></i>Birthday</th>
                 </tr>
             </thead>
             <tbody>
-                {filtered.map(user=>
-                    <tr key={user.id.value}>
-                    <td><img src = {user.picture.thumbnail} alt="user"/></td>
-                    <td>{user.name.first}</td>
-                    <td>{user.name.last}</td>
+                {filtered.users.map(user=>
+                    <tr key={user.dob}>
+                    <td><img src = {user.image} alt="user"/></td>
+                    <td>{user.name}</td>
                     <td>{user.email}</td>
                     <td>{user.phone}</td>
-                    <td>{user.dob.date}</td>
+                    <td>{user.dob}</td>
                 </tr>
                     )}
             </tbody>
